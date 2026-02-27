@@ -1,0 +1,13 @@
+__pycache__/
+.pycache/
+*.pyc
+.venv/
+.env
+*.db
+artifacts/
+
+# Node
+node_modules/
+
+# OS
+.DS_Store

@@ -1,0 +1,66 @@
+services:
+  - type: web
+    name: chat-session-hub-web
+    env: python
+    plan: starter
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "uvicorn app.main:app --host 0.0.0.0 --port $PORT"
+    rootDir: backend
+    envVars:
+      - key: ENVIRONMENT
+        value: "production"
+      - key: DATABASE_URL
+        sync: false
+      - key: ARTIFACTS_REPO_PATH
+        sync: false
+      - key: ARTIFACTS_GIT_AUTO_PUSH
+        value: "false"
+      - key: GITHUB_TOKEN
+        sync: false
+      - key: GITHUB_REPO
+        sync: false
+      - key: LLM_PROVIDER
+        value: "openai"
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: GOOGLE_DOCS_ENABLED
+        value: "true"
+      - key: GOOGLE_CREDENTIALS_JSON
+        sync: false
+      - key: DAILY_TIMEZONE
+        value: "America/Chicago"
+      - key: DAILY_HOUR
+        value: "2"
+      - key: DAILY_MINUTE
+        value: "0"
+
+cronJobs:
+  - name: chat-session-hub-daily
+    schedule: "0 8 * * *" # locked to 2:00 AM CST year-round (08:00 UTC)
+    command: "python -m app.jobs.daily"
+    rootDir: backend
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: ARTIFACTS_REPO_PATH
+        sync: false
+      - key: ARTIFACTS_GIT_AUTO_PUSH
+        value: "false"
+      - key: GITHUB_TOKEN
+        sync: false
+      - key: GITHUB_REPO
+        sync: false
+      - key: LLM_PROVIDER
+        value: "openai"
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: GOOGLE_DOCS_ENABLED
+        value: "true"
+      - key: GOOGLE_CREDENTIALS_JSON
+        sync: false
+      - key: DAILY_TIMEZONE
+        value: "America/Chicago"
+      - key: DAILY_HOUR
+        value: "2"
+      - key: DAILY_MINUTE
+        value: "0"
