@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from typing import Iterable
 from datetime import datetime
 from sqlalchemy import select
 from ..db import SessionLocal
@@ -38,9 +37,9 @@ def _parse_dt(value: str | None) -> datetime:
 
 
 def ingest_payload(payload: dict) -> None:
-    source_name = payload.get("source", "unknown")
+    source_name = str(payload.get("source") or "unknown")
     conversations = payload.get("conversations", [])
-    if not isinstance(conversations, Iterable):
+    if not isinstance(conversations, list):
         return
 
     with SessionLocal() as session:
@@ -52,6 +51,8 @@ def ingest_payload(payload: dict) -> None:
             session.refresh(source)
 
         for convo in conversations:
+            if not isinstance(convo, dict):
+                continue
             external_id = convo.get("external_id") or ""
             title = convo.get("title") or ""
             metadata = convo.get("metadata") or {}
@@ -76,7 +77,12 @@ def ingest_payload(payload: dict) -> None:
             session.add(conversation)
             session.flush()
 
-            for msg in convo.get("messages", []):
+            raw_messages = convo.get("messages", [])
+            if not isinstance(raw_messages, list):
+                raw_messages = []
+            for msg in raw_messages:
+                if not isinstance(msg, dict):
+                    continue
                 message = models.Message(
                     conversation_id=conversation.id,
                     role=msg.get("role", "unknown"),

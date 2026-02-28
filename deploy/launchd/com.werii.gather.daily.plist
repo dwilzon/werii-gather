@@ -9,7 +9,7 @@
     <array>
       <string>/bin/zsh</string>
       <string>-lc</string>
-      <string>/Users/david/Library/Mobile Documents/com~apple~CloudDocs/Business/Projects/Cogi/backend/scripts/run_daily.sh</string>
+      <string>/Users/david/local/code/werii-gather/backend/scripts/run_daily.sh</string>
     </array>
 
     <key>StartCalendarInterval</key>

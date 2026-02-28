@@ -12,10 +12,19 @@ def create_github_issue(title: str, body: str) -> dict:
         "Authorization": f"Bearer {settings.github_token}",
         "X-GitHub-Api-Version": "2022-11-28",
     }
-    response = requests.post(url, headers=headers, json={"title": title, "body": body}, timeout=30)
+    try:
+        response = requests.post(url, headers=headers, json={"title": title, "body": body}, timeout=30)
+    except requests.RequestException as exc:
+        return {"skipped": False, "ok": False, "error": str(exc)}
+
     if response.status_code >= 300:
         return {"skipped": False, "ok": False, "status_code": response.status_code}
-    payload = response.json()
+
+    try:
+        payload = response.json()
+    except ValueError:
+        return {"skipped": False, "ok": False, "status_code": response.status_code, "error": "Invalid JSON"}
+
     return {"ok": True, "number": payload.get("number"), "url": payload.get("html_url")}
 
 

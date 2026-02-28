@@ -33,6 +33,10 @@ services:
         value: "2"
       - key: DAILY_MINUTE
         value: "0"
+      - key: WRITE_API_TOKEN
+        sync: false
+      - key: MAX_UPLOAD_BYTES
+        value: "10485760"
 
 cronJobs:
   - name: chat-session-hub-daily
@@ -64,3 +68,7 @@ cronJobs:
         value: "2"
       - key: DAILY_MINUTE
         value: "0"
+      - key: WRITE_API_TOKEN
+        sync: false
+      - key: MAX_UPLOAD_BYTES
+        value: "10485760"

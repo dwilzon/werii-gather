@@ -17,6 +17,8 @@ class Settings(BaseModel):
     daily_timezone: str = os.getenv("DAILY_TIMEZONE", "America/Chicago")
     daily_hour: int = int(os.getenv("DAILY_HOUR", "2"))
     daily_minute: int = int(os.getenv("DAILY_MINUTE", "0"))
+    write_api_token: str = os.getenv("WRITE_API_TOKEN", "")
+    max_upload_bytes: int = int(os.getenv("MAX_UPLOAD_BYTES", "10485760"))
 
 
 settings = Settings()
